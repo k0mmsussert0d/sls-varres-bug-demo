@@ -1,0 +1,20 @@
+service: sls-bug-demo
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  environment:
+    TABLE_NAME:
+      'Fn::ImportValue': ${self:service}-deps-${sls:stage}-table-name
+    BUCKET_NAME:
+      'Fn::ImportValue': ${self:service}-deps-${sls:stage}-bucket-name
+
+functions:
+  names:
+    handler: handler.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /
